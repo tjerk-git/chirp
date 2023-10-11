@@ -4,8 +4,11 @@ import Link from "next/link";
 
 import { api } from "~/utils/api";
 
-export default function Home() {
+export default function Home(props) {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
+
+  const { data } = api.posts.getAll.useQuery();
+
 
   return (
     <>
@@ -16,7 +19,13 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
 
-        <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
+        <SignInButton />
+
+        <div>
+          {data?.map((post) => (
+            <div key={post.id}>{post.content}</div>
+          ))}
+        </div>
       </main>
     </>
   );
